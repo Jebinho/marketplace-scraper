@@ -1,13 +1,18 @@
-import { Dataset } from 'crawlee';
+import { Dataset, KeyValueStore } from 'crawlee';
 
 export const handleMercadoLivreSearch = async ({ page, request, log }) => {
     const { platform, term, maxItems } = request.userData;
     log.info(`Scraping ${platform} for "${term}"`);
 
+    // Aguardar o carregamento da página com um limite de tempo maior (proxies são lentos)
     try {
-        await page.waitForSelector('.ui-search-layout__item', { timeout: 10000 });
+        await page.waitForSelector('.ui-search-layout__item', { timeout: 30000 });
     } catch (e) {
-        log.warning(`No items found for ${term} on ${platform}`);
+        log.warning(`No items found or captcha blocked for ${term} on ${platform}. Saving screenshot for debugging.`);
+        const screenshot = await page.screenshot();
+        await KeyValueStore.setValue(`error-ml-${term.replace(/[^a-z0-9]/gi, '_')}.png`, screenshot, { contentType: 'image/png' });
+        const html = await page.content();
+        await KeyValueStore.setValue(`error-ml-${term.replace(/[^a-z0-9]/gi, '_')}.html`, html, { contentType: 'text/html' });
         return;
     }
 

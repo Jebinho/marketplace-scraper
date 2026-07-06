@@ -1,21 +1,22 @@
-import { Dataset } from 'crawlee';
+import { Dataset, KeyValueStore } from 'crawlee';
 
 export const handleAmazonSearch = async ({ page, request, log }) => {
     const { platform, term, maxItems } = request.userData;
     log.info(`Scraping ${platform} for "${term}"`);
 
     try {
-        // Amazon typically uses these selectors for search results
-        await page.waitForSelector('[data-component-type="s-search-result"]', { timeout: 10000 });
+        await page.waitForSelector('[data-component-type="s-search-result"]', { timeout: 30000 });
     } catch (e) {
-        log.warning(`No items found or captcha blocked for ${term} on ${platform}`);
+        log.warning(`Timeout on Amazon for ${term}. Saving screenshot.`);
+        const screenshot = await page.screenshot();
+        await KeyValueStore.setValue(`error-amazon-${term.replace(/[^a-z0-9]/gi, '_')}.png`, screenshot, { contentType: 'image/png' });
         return;
     }
 
     const products = await page.$$eval('[data-component-type="s-search-result"]', (els, max) => {
         return els.slice(0, max).map(el => {
             const nameEl = el.querySelector('h2 a span');
-            const name = nameEl ? nameEl.innerText : null;
+            const name = nameEl ? nameEl.innerText : el.innerText.split('\\n')[0];
             
             const priceWhole = el.querySelector('.a-price-whole')?.innerText;
             const priceFraction = el.querySelector('.a-price-fraction')?.innerText;
@@ -50,6 +51,15 @@ export const handleAmazonSearch = async ({ page, request, log }) => {
     }, maxItems);
 
     const validProducts = products.filter(p => p.name);
+    
+    if (validProducts.length === 0) {
+        log.warning(`Parsed 0 items on Amazon for ${term}. Might be layout issue. Saving screenshot.`);
+        const screenshot = await page.screenshot();
+        await KeyValueStore.setValue(`error-amazon-0-items-${term.replace(/[^a-z0-9]/gi, '_')}.png`, screenshot, { contentType: 'image/png' });
+        const html = await page.content();
+        await KeyValueStore.setValue(`error-amazon-0-items-${term.replace(/[^a-z0-9]/gi, '_')}.html`, html, { contentType: 'text/html' });
+    }
+
     const data = validProducts.map(p => ({ ...p, platform, search_term: term }));
     
     await Dataset.pushData(data);
