@@ -8,11 +8,20 @@ await Actor.init();
 // Get the input of the actor
 const input = await Actor.getInput();
 
-if (!input || !input.searchTerms || !input.platforms) {
-    throw new Error('Input is missing searchTerms or platforms.');
+if (!input || !input.searchTerms) {
+    throw new Error('Input is missing searchTerms.');
 }
 
-const { searchTerms, platforms, maxItems = 20 } = input;
+const { 
+    searchTerms, 
+    maxItems = 20,
+    scrapeMercadoLivre = false,
+    scrapeAmazon = false,
+    scrapeShopee = false,
+    scrapeAliExpress = false,
+    scrapeEbay = false,
+    scrapeWalmart = false
+} = input;
 
 // Create an array of initial requests based on the platforms and search terms
 const initialRequests = [];
@@ -20,7 +29,7 @@ const initialRequests = [];
 for (const term of searchTerms) {
     const encodedTerm = encodeURIComponent(term);
     
-    if (platforms.includes('mercadolivre')) {
+    if (scrapeMercadoLivre) {
         initialRequests.push({
             url: `https://lista.mercadolivre.com.br/${encodedTerm}`,
             userData: { platform: 'Mercado Livre', term, maxItems },
@@ -28,7 +37,7 @@ for (const term of searchTerms) {
         });
     }
     
-    if (platforms.includes('amazon')) {
+    if (scrapeAmazon) {
         initialRequests.push({
             url: `https://www.amazon.com.br/s?k=${encodedTerm}`,
             userData: { platform: 'Amazon', term, maxItems },
@@ -36,7 +45,7 @@ for (const term of searchTerms) {
         });
     }
 
-    if (platforms.includes('shopee')) {
+    if (scrapeShopee) {
         initialRequests.push({
             url: `https://shopee.com.br/search?keyword=${encodedTerm}`,
             userData: { platform: 'Shopee', term, maxItems },
@@ -44,7 +53,7 @@ for (const term of searchTerms) {
         });
     }
 
-    if (platforms.includes('aliexpress')) {
+    if (scrapeAliExpress) {
         initialRequests.push({
             url: `https://pt.aliexpress.com/w/wholesale-${encodedTerm}.html`,
             userData: { platform: 'AliExpress', term, maxItems },
@@ -52,7 +61,7 @@ for (const term of searchTerms) {
         });
     }
 
-    if (platforms.includes('ebay')) {
+    if (scrapeEbay) {
         initialRequests.push({
             url: `https://www.ebay.com/sch/i.html?_nkw=${encodedTerm}`,
             userData: { platform: 'eBay', term, maxItems },
@@ -60,7 +69,7 @@ for (const term of searchTerms) {
         });
     }
 
-    if (platforms.includes('walmart')) {
+    if (scrapeWalmart) {
         initialRequests.push({
             url: `https://www.walmart.com/search?q=${encodedTerm}`,
             userData: { platform: 'Walmart', term, maxItems },

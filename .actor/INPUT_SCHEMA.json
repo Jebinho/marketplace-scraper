@@ -7,18 +7,8 @@
       "title": "Search Terms",
       "type": "array",
       "description": "Lista de termos para buscar (ex: 'iphone 15', 'notebook gamer').",
-      "editor": "stringList"
-    },
-    "platforms": {
-      "title": "Platforms to Scrape",
-      "type": "array",
-      "description": "Selecione quais plataformas raspar.",
-      "items": {
-        "type": "string",
-        "enum": ["mercadolivre", "amazon", "shopee", "aliexpress", "ebay", "walmart"],
-        "enumTitles": ["Mercado Livre", "Amazon", "Shopee", "AliExpress", "eBay", "Walmart"]
-      },
-      "default": ["mercadolivre", "amazon"]
+      "editor": "stringList",
+      "default": ["mouse logitech"]
     },
     "maxItems": {
       "title": "Max Items per Platform",
@@ -26,7 +16,43 @@
       "description": "Número máximo de itens a extrair por plataforma e por termo de busca.",
       "default": 20,
       "minimum": 1
+    },
+    "scrapeMercadoLivre": {
+      "title": "Mercado Livre",
+      "type": "boolean",
+      "description": "Ativar extração no Mercado Livre",
+      "default": true
+    },
+    "scrapeAmazon": {
+      "title": "Amazon",
+      "type": "boolean",
+      "description": "Ativar extração na Amazon",
+      "default": true
+    },
+    "scrapeShopee": {
+      "title": "Shopee",
+      "type": "boolean",
+      "description": "Ativar extração na Shopee",
+      "default": false
+    },
+    "scrapeAliExpress": {
+      "title": "AliExpress",
+      "type": "boolean",
+      "description": "Ativar extração no AliExpress",
+      "default": false
+    },
+    "scrapeEbay": {
+      "title": "eBay",
+      "type": "boolean",
+      "description": "Ativar extração no eBay",
+      "default": false
+    },
+    "scrapeWalmart": {
+      "title": "Walmart",
+      "type": "boolean",
+      "description": "Ativar extração no Walmart",
+      "default": false
     }
   },
-  "required": ["searchTerms", "platforms"]
+  "required": ["searchTerms"]
 }
