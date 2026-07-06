@@ -13,7 +13,6 @@
       "title": "Platforms to Scrape",
       "type": "array",
       "description": "Selecione quais plataformas raspar.",
-      "editor": "selectPicker",
       "items": {
         "type": "string",
         "enum": ["mercadolivre", "amazon", "shopee", "aliexpress", "ebay", "walmart"],
