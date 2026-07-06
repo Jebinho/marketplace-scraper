@@ -1,0 +1,11 @@
+{
+  "actorSpecification": 1,
+  "name": "marketplace-scraper",
+  "title": "Global Marketplace Scraper",
+  "description": "Scrapes products from Mercado Livre, Amazon, Shopee, AliExpress, eBay, and Walmart.",
+  "version": "1.0.0",
+  "meta": {
+    "templateId": "node-playwright"
+  },
+  "dockerfile": "./Dockerfile"
+}

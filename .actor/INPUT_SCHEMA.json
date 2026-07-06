@@ -1,0 +1,33 @@
+{
+  "title": "Marketplace Scraper Input",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "searchTerms": {
+      "title": "Search Terms",
+      "type": "array",
+      "description": "Lista de termos para buscar (ex: 'iphone 15', 'notebook gamer').",
+      "editor": "stringList"
+    },
+    "platforms": {
+      "title": "Platforms to Scrape",
+      "type": "array",
+      "description": "Selecione quais plataformas raspar.",
+      "editor": "selectPicker",
+      "items": {
+        "type": "string",
+        "enum": ["mercadolivre", "amazon", "shopee", "aliexpress", "ebay", "walmart"],
+        "enumTitles": ["Mercado Livre", "Amazon", "Shopee", "AliExpress", "eBay", "Walmart"]
+      },
+      "default": ["mercadolivre", "amazon"]
+    },
+    "maxItems": {
+      "title": "Max Items per Platform",
+      "type": "integer",
+      "description": "Número máximo de itens a extrair por plataforma e por termo de busca.",
+      "default": 20,
+      "minimum": 1
+    }
+  },
+  "required": ["searchTerms", "platforms"]
+}
