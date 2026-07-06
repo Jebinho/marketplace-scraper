@@ -78,11 +78,14 @@ for (const term of searchTerms) {
     }
 }
 
+// Configura o proxy do Apify com base na entrada do usuário
+const proxyConfiguration = await Actor.createProxyConfiguration(input.proxyConfiguration);
+
 // Create a PlaywrightCrawler
 const crawler = new PlaywrightCrawler({
     requestHandler: router,
     maxRequestsPerCrawl: 50, // Increase as needed
-    // Playwright Crawler options
+    proxyConfiguration, // Repassa as proxies para o navegador
     headless: true,
 });
 

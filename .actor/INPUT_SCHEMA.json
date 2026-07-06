@@ -52,6 +52,13 @@
       "type": "boolean",
       "description": "Ativar extração no Walmart",
       "default": false
+    },
+    "proxyConfiguration": {
+      "title": "Configuração de Proxy",
+      "type": "object",
+      "description": "É ALTAMENTE RECOMENDADO usar Apify Proxy (de preferência Residencial) para rodar na nuvem, senão os marketplaces bloquearão o acesso (Captcha).",
+      "editor": "proxy",
+      "default": { "useApifyProxy": true }
     }
   },
   "required": ["searchTerms"]
