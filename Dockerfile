@@ -2,7 +2,7 @@
 FROM apify/actor-node-playwright-chrome:20
 
 # Copiar os arquivos de dependência
-COPY package*.json ./
+COPY --chown=myuser:myuser package*.json ./
 
 # Instalar dependências de produção
 RUN npm --quiet set progress=false \
@@ -15,7 +15,7 @@ RUN npm --quiet set progress=false \
  && npm --version
 
 # Copiar o restante do código fonte
-COPY . ./
+COPY --chown=myuser:myuser . ./
 
 # Executar o scraper
 CMD npm start
